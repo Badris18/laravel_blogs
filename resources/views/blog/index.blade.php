@@ -3,44 +3,49 @@
 @section('content')
 <style>
     .blog-card {
-        display: flex;
-        flex-direction: row;
         background-color: #fff;
         border-radius: 1rem;
-        overflow: hidden;
-        transition: box-shadow 0.3s ease;
+        padding: 1.5rem;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
     }
 
     .blog-card:hover {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .blog-image {
-        width: 40%;
-        object-fit: cover;
+    .blog-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
     }
 
-    .blog-content {
-        padding: 1.5rem;
-        width: 60%;
+    .blog-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 1rem;
+        flex-shrink: 0;
     }
 
     .blog-title {
         font-size: 1.5rem;
         font-weight: 700;
-        margin-bottom: 0.75rem;
-    }
-
-    .blog-description {
-        font-size: 1rem;
-        color: #555;
-        margin-bottom: 1rem;
+        margin: 0;
     }
 
     .blog-meta {
         font-size: 0.85rem;
         color: #999;
+        margin-top: 0.25rem;
+    }
+
+    .blog-description {
+        font-size: 1rem;
+        color: #555;
         margin-bottom: 1rem;
     }
 
@@ -58,16 +63,15 @@
     /* Responsive */
     @media (max-width: 768px) {
         .blog-card {
+            padding: 1rem;
+        }
+        .blog-header {
             flex-direction: column;
+            align-items: flex-start;
         }
-
-        .blog-image {
-            width: 100%;
-            height: 200px;
-        }
-
-        .blog-content {
-            width: 100%;
+        .blog-avatar {
+            margin-right: 0;
+            margin-bottom: 0.5rem;
         }
     }
 
@@ -106,18 +110,22 @@
             @endphp
 
             <div class="blog-card">
-                <img src="{{ $imagePath }}" alt="Post Image" class="blog-image">
-                <div class="blog-content">
-                    <div class="blog-meta">
-                        Posted {{ $post->created_at->diffForHumans() }}
-                        @if($post->category)
-                            • {{ $post->category->name }}
-                        @endif
+                <div class="blog-header">
+                    <img src="{{ $imagePath }}" alt="Post Image" class="blog-avatar">
+                    <div>
+                        <h2 class="blog-title">{{ $post->title }}</h2>
+                        <div class="blog-meta">
+                            Posted {{ $post->created_at->diffForHumans() }}
+                            @if($post->category)
+                                • {{ $post->category->name }}
+                            @endif
+                        </div>
                     </div>
-                    <div class="blog-title">{{ $post->title }}</div>
-                    <div class="blog-description">{{ Str::limit($post->description, 150) }}</div>
-                    <a href="{{ route('posts.show', $post) }}" class="read-more">Read More →</a>
                 </div>
+
+                <div class="blog-description">{{ Str::limit($post->description, 150) }}</div>
+
+                <a href="{{ route('posts.show', $post) }}" class="read-more">Read More →</a>
             </div>
         @endforeach
     </div>
